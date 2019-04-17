@@ -1,31 +1,33 @@
-import {Component, createElement} from 'rax';
-import {isWeex} from 'universal-env';
+import { Component, createElement } from 'rax';
+import { isWeex } from 'universal-env';
 
 const DEFAULT_WIDTH = 100;
 const DEFAULT_HEIGHT = 60;
 
-class Switch extends Component {
-  static propTypes = {};
+const Switch = (props) => {
+  const {
+    style,
+    disabled,
+    value,
+    onValueChange,
+    onTintColor = '#00e158',
+    thumbTintColor = '#ffffff',
+    tintColor = '#ffffff'
+  } = props;
 
-  static defaultProps = {
-    onTintColor: '#00e158',
-    thumbTintColor: '#ffffff',
-    tintColor: '#ffffff'
-  }
-
-  handleClick = (e) => {
-    if (this.props.disabled) {
+  const handleClick = (e) => {
+    if (disabled) {
       return null;
     }
-    var newVal = !this.props.value;
-    this.props.onValueChange && this.props.onValueChange.call(this, newVal);
+    var newVal = !value;
+    onValueChange && onValueChange.call(this, newVal);
   };
 
-  handleChange = ({value}) => {
-    this.props.onValueChange && this.props.onValueChange.call(this, value);
+  const handleChange = ({ value }) => {
+    onValueChange && onValueChange.call(this, value);
   };
 
-  getStyles() {
+  const getStyles = () => {
     return {
       span: {
         width: DEFAULT_WIDTH,
@@ -47,14 +49,14 @@ class Switch extends Component {
         WebkitBackfaceVisibility: 'hidden'
       },
       checkedSpan: {
-        borderColor: this.props.onTintColor,
-        backgroundColor: this.props.onTintColor,
-        boxShadow: this.props.onTintColor + ' 0 0 0 16px inset',
+        borderColor: onTintColor,
+        backgroundColor: onTintColor,
+        boxShadow: onTintColor + ' 0 0 0 16px inset',
         WebkitTransition: 'border 0.2s, box-shadow 0.2s, background-color 1s'
       },
       uncheckedSpan: {
         borderColor: '#dfdfdf',
-        backgroundColor: this.props.tintColor,
+        backgroundColor: tintColor,
         boxShadow: '#dfdfdf 0 0 0 0 inset',
         WebkitTransition: 'border 0.2s, box-shadow 0.2s'
       },
@@ -68,53 +70,47 @@ class Switch extends Component {
         top: 0,
         width: 60,
         height: 60,
-        backgroundColor: this.props.thumbTintColor,
+        backgroundColor: thumbTintColor,
         borderRadius: '100%',
         boxShadow: '0 1px 3px rgba(0,0,0,0.4)',
         WebkitTransition: '-webkit-transform 0.2s ease-in'
       },
       checkedSmall: {
-        WebkitTransform: 'translateX(40rem)' // should with rem unit that the value is string type
+        WebkitTransform: 'translateX(2.5rem)' // should with rem unit that the value is string type(before 40rem, now 2.5rem)
       },
       uncheckedSmall: {
         WebkitTransform: 'translateX(0)'
       }
     };
+  };
+  if (isWeex) {
+    let nativeProps = {
+      style,
+      disabled,
+      checked: value,
+      onChange: handleChange
+    };
+
+    return (
+      <switch {...nativeProps} />
+    );
+  } else {
+    let styles = getStyles();
+    let spanStyle = value ? { ...styles.span, ...styles.checkedSpan } : { ...styles.span, ...styles.uncheckedSpan };
+    let smallStyle = value ? { ...styles.small, ...styles.checkedSmall } : { ...styles.small, ...styles.uncheckedSmall };
+    spanStyle = disabled ? { ...spanStyle, ...styles.disabledSpan } : spanStyle;
+    spanStyle = {
+      ...spanStyle,
+      ...style
+    };
+
+    return (
+      <span onClick={handleClick} style={spanStyle}>
+        <small style={smallStyle} />
+      </span>
+    );
   }
-
-  render() {
-    const { style, value, disabled} = this.props;
-
-    if (isWeex) {
-      let nativeProps = {
-        style,
-        disabled,
-        checked: value,
-        onChange: this.handleChange
-      };
-
-      return (
-        <switch {...nativeProps} />
-      );
-    } else {
-      let styles = this.getStyles();
-      let spanStyle = value ? {...styles.span, ...styles.checkedSpan} : {...styles.span, ...styles.uncheckedSpan};
-      let smallStyle = value ? {...styles.small, ...styles.checkedSmall} : {...styles.small, ...styles.uncheckedSmall};
-      spanStyle = disabled ? {...spanStyle, ...styles.disabledSpan} : spanStyle;
-      spanStyle = {
-        ...spanStyle,
-        ...style
-      };
-
-      return (
-        <span onClick={this.handleClick} style={spanStyle}>
-          <small style={smallStyle} />
-        </span>
-      );
-    }
-  }
-}
-
+};
 
 const styles = {
   // width and height not work on weex switch
