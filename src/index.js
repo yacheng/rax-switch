@@ -73,13 +73,15 @@ const Switch = (props) => {
         backgroundColor: thumbTintColor,
         borderRadius: '100%',
         boxShadow: '0 1px 3px rgba(0,0,0,0.4)',
-        WebkitTransition: '-webkit-transform 0.2s ease-in'
+        WebkitTransition: 'all 0.2s ease-in'
       },
       checkedSmall: {
-        WebkitTransform: 'translateX(2.5rem)' // should with rem unit that the value is string type(before 40rem, now 2.5rem)
+        right: 0,
+        // WebkitTransform: 'translateX(40rem)' // should with rem unit that the value is string type
       },
       uncheckedSmall: {
-        WebkitTransform: 'translateX(0)'
+        left: 0,
+        // WebkitTransform: 'translateX(0)'
       }
     };
   };
