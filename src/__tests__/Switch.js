@@ -2,6 +2,9 @@ import {createElement, Component} from 'rax';
 import renderer from 'rax-test-renderer';
 import Switch from '../';
 
+// use jest.useFakeTimers()
+jest.useFakeTimers();
+
 class SwitchTest extends Component {
   state = {
     value: true
@@ -32,6 +35,8 @@ describe('Switch', () => {
     expect(tree.style.backgroundColor).toEqual('#00e158');
 
     tree.eventListeners.click();
+    // run setTimeout callback
+    jest.runAllTimers();
     tree = component.toJSON();
     expect(tree.style.backgroundColor).toEqual('#ffffff');
   });
