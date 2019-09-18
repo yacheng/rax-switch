@@ -1,0 +1,57 @@
+.rax-switch {
+  width: 100rpx;
+  height: 60rpx;
+  min-width: 100rpx;
+  height: 60rpx;
+  border-radius: 40rpx;
+  position: relative;
+  display: inline-block;
+  margin: 4rpx;
+  padding: 0;
+  cursor: default;
+  vertical-align: middle;
+  border-color: #dfdfdf;
+  border-width: 1px;
+  border-style: solid;
+  user-select: none;
+  box-sizing: content-box;
+  backface-visibility: hidden;
+}
+
+.rax-switch--checked {
+  border-color: #00e158;
+  box-shadow: #00e158 0 0 0 16px inset;
+  transition: border 0.2s, box-shadow 0.2s, background-color 1s;
+}
+
+.rax-switch--unchecked {
+  border-color: #dfdfdf;
+  background-color: #ffffff;
+  box-shadow: #dfdfdf 0 0 0 0 inset;
+  transition: border 0.2s, box-shadow 0.2s;
+}
+
+.rax-switch--disbaled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.rax-switch__thumb {
+  position: absolute;
+  top: 0;
+  width: 60rpx;
+  height: 60rpx;
+  background-color: #ffffff;
+  border-radius: 100%;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+  transition: transform 0.2s ease-in;
+}
+
+.rax-switch__thumb--checked {
+  transform: translateX(40rpx);
+}
+
+.rax-switch__thumb--unchecked {
+  transform: translateX(0);
+}
