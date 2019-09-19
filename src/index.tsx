@@ -3,7 +3,10 @@ import {
   HTMLAttributes,
   ForwardRefExoticComponent,
   forwardRef,
-  RefAttributes
+  RefAttributes,
+  useState,
+  useEffect,
+  useRef
 } from "rax";
 import { isWeex } from "universal-env";
 import "./index.css";
@@ -40,7 +43,6 @@ export interface SwitchProps
    * default(默认值):true
    */
   value?: boolean;
-  name?: string;
   /**
    * change event
    * (值改变时调用此函数)
@@ -54,11 +56,13 @@ const Switch: ForwardRefExoticComponent<SwitchProps> = forwardRef(
       className,
       style = {},
       disabled,
-      value,
+      value = true,
       onValueChange,
       onTintColor,
       tintColor
     } = props;
+    const [checked, setChecked] = useState(value);
+    const mountedRef = useRef(false);
     const onChange = ({ value }: any) => {
       if (onValueChange) {
         onValueChange(value);
@@ -68,10 +72,15 @@ const Switch: ForwardRefExoticComponent<SwitchProps> = forwardRef(
       if (disabled) {
         return;
       }
-      onChange({
-        value: !value
-      });
+      setChecked(!checked);
     };
+    useEffect(() => {
+      if (!mountedRef.current) {
+        mountedRef.current = true;
+      } else {
+        onChange({ value: checked });
+      }
+    }, [checked]);
     if (isWeex) {
       return (
         <switch
@@ -87,17 +96,17 @@ const Switch: ForwardRefExoticComponent<SwitchProps> = forwardRef(
         <span
           ref={ref}
           className={`rax-switch rax-switch--${
-            value ? "checked" : "unchecked"
+            checked ? "checked" : "unchecked"
           } ${className}`}
           style={{
             ...style,
-            backgroundColor: value ? onTintColor : tintColor
+            backgroundColor: checked ? onTintColor : tintColor
           }}
           onClick={onClick}
         >
           <small
             className={`rax-switch__thumb rax-switch__thumb--${
-              value ? "checked" : "unchecked"
+              checked ? "checked" : "unchecked"
             }`}
           />
         </span>

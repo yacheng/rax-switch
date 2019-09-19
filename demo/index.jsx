@@ -5,13 +5,15 @@ import { createElement, render, useState } from 'rax';
 import DU from 'driver-universal';
 import Switch from '../src';
 import View from 'rax-view';
+import Text from 'rax-text';
 
 const App = () => {
-  const [state, setState] = useState(false);
+  const [status, setStatus] = useState(false);
   return (<View>
-    <Switch value={state} onValueChange={(value) => {
-      setState(value);
+    <Switch value={false} onValueChange={value => {
+      setStatus(value);
     }} />
+    <Text>Switch Status: {status}</Text>
   </View>);
 };
 
